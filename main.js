@@ -15,7 +15,7 @@ const score = 0;
 // funcion aleatoria
 function appChoice() {
     const choices = ['rock', 'paper', 'scissors'];
-    const randomNum = Math.floor(Math.random() * 3); // 0, 1, 2/ hola
+    const randomNum = Math.floor(Math.random() * 3); // 0, 1, 2
     return choices[randomNum];
 }
 
