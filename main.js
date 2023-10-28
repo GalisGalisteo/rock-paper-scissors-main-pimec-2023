@@ -9,80 +9,165 @@
  * 
 */
 
-// variable para controlar la puntuación del usuario
+
+let isPlaying = true;
+
 let score = 0;
 
+const main = document.querySelector('main');
+const gameBody = document.querySelector('.game-body');
+const rockChoice = document.querySelector('#rock');
+const paperChoice = document.querySelector('#paper');
+const scissorsChoice = document.querySelector('#scissors');
 
-// funcion aleatoria
-
-function appChoice() {
+function appChoiceRandom() {
     const choices = ['rock', 'paper', 'scissors'];
-    const randomNum = Math.floor(Math.random() * 3); // 0, 1, 2
+    const randomNum = Math.floor(Math.random() * 3);
     return choices[randomNum];
 }
 
 function userWins(userChoice, appChoice) {
-    return (
+    if (
         userChoice === 'rock' && appChoice === 'scissors' ||
         userChoice === 'paper' && appChoice === 'rock' ||
         userChoice === 'scissors' && appChoice === 'paper'
-    )
+    ) {
+        return 1;
+    } else if (userChoice === appChoice) {
+        return 0;
+    }
+    return -1;
+
 }
 
-const paperChoice = document.querySelector('#paper');
-const rockChoice = document.querySelector('#rock');
-const scissorsChoice = document.querySelector('#scissors');
-const gameBody = document.querySelector('.game-body');
-const main = document.querySelector('main');
+function playGame(userChoice, appChoice, nodeEvent) {
 
+    rockChoice.style.display = 'none';
+    paperChoice.style.display = 'none';
+    scissorsChoice.style.display = 'none';
 
-rockChoice.addEventListener('click', function () {
-    const possibleChoices = ['paper', 'scissors'];
+    nodeEvent.style.display = 'initial';
 
-    const userChoice = 'rock';
-    let appChoiceVar;
-
-    do {
-        appChoiceVar = appChoice();
+    if (appChoice === userChoice) {
+        const duplicateNode = nodeEvent.cloneNode(true);
+        gameBody.appendChild(duplicateNode);
+        duplicateNode.classList.add('choosed-item--com', 'choosed-item--com--s4', 'duplicate-item');
     }
-    while (userChoice === appChoiceVar);
 
-    const possibleChoicesIndex = possibleChoices.indexOf(appChoiceVar);
-    possibleChoices.splice(possibleChoicesIndex, 1);
+    nodeEvent.classList.add('choosed-item--user', 'choosed-item--user--s4');
 
-    rockChoice.classList.add('choosed-item--user');
-    document.getElementById(appChoiceVar).classList.add('choosed-item--com');
-    document.getElementById(possibleChoices[0]).style.display = 'none';
+    const appChoiceNode = document.getElementById(appChoice);
+    appChoiceNode.style.display = 'initial';
+    appChoiceNode.classList.add('choosed-item--com', 'choosed-item--com--s4');
 
-    const gameOverMessage = document.createElement('div');
-    gameOverMessage.classList.add('game-over-container');
-    main.appendChild(gameOverMessage);
+    const gameOverContainer = document.createElement('div');
+    gameOverContainer.classList.add('game-over-container');
+    main.appendChild(gameOverContainer);
 
-    if (!userWins(userChoice, appChoiceVar)) {
-        // devolver mensaje de YOU LOST
-        gameOverMessage.innerHTML = '<h2>YOU LOST!</h2>';
-        // restar 1 punto al score
+    const gameOverMessage = document.createElement('h2');
+    gameOverContainer.classList.add('game-over__message');
+    gameOverContainer.appendChild(gameOverMessage);
+
+    const playAgainBtn = document.createElement('button');
+    playAgainBtn.classList.add('btn__play-again');
+    playAgainBtn.textContent = 'Play Again';
+    gameOverContainer.appendChild(playAgainBtn);
+
+    playAgainBtn.addEventListener('click', () => {
+        resetGame();
+    })
+
+    const gameResult = userWins(userChoice, appChoice);
+
+    if (gameResult === -1) {
+        gameOverMessage.textContent = 'YOU LOST!';
         score--;
-    } else {
-        // devolver mensaje de YOU WON
-        gameOverMessage.innerHTML = '<h2>YOU WON!</h2>';
-        // sumar 3 puntos al score
+        isPlaying = false;
+        updateScore()
+    } else if (gameResult === 1) {
+        gameOverMessage.textContent = 'YOU WON!';
         score += 3;
-    };
-})
+        isPlaying = false;
+        updateScore()
+    } else {
+        gameOverMessage.textContent = "IT'S A TIE!";
+        isPlaying = false;
+        updateScore()
+    }
+}
 
-// paperChoice.addEventListener('click', function () {
-//     const userChoice = 'paper';
-//     userWins(userChoice, appChoice());
-// })
+function updateScore() {
+    document.querySelector('span.header__value').textContent = score;
+}
 
-// scissorsChoice.addEventListener('click', function () {
-//     const userChoice = 'scissors';
-//     userWins(userChoice, appChoice());
-// })
+function resetGame() {
+    isPlaying = true;
+
+    rockChoice.style.display = 'initial';
+    paperChoice.style.display = 'initial';
+    scissorsChoice.style.display = 'initial';
+
+    const userItems = document.querySelectorAll('.choosed-item--com.choosed-item--com--s4');
+    userItems.forEach(element => {
+        element.classList.remove('choosed-item--com', 'choosed-item--com--s4');
+    });
+
+    const appItems = document.querySelectorAll('.choosed-item--user.choosed-item--user--s4')
+    appItems.forEach(element => {
+        element.classList.remove('choosed-item--user', 'choosed-item--user--s4');
+    });
+
+    const gameOverContainer = document.querySelector('.game-over-container');
+    gameOverContainer.remove();
+
+    const duplicateItem = document.querySelector('.duplicate-item');
+    if (duplicateItem) {
+        duplicateItem.remove();
+    }
+
+    setupGame();
+}
+
+function showRules() {
+    
+    const rulesPopup = document.querySelector('.rules-popup');
+    const overlay = document.querySelector('.overlay');
+
+    document.querySelector('.rules-btn').addEventListener('click', () => {
+        rulesPopup.classList.add('rules-popup--active');
+        overlay.classList.add('overlay--active');
+        document.querySelector('.close-icon').addEventListener('click', () => {
+            rulesPopup.classList.remove('rules-popup--active');
+            overlay.classList.remove('overlay--active');
+        })
+    })
+}
+
+function setupGame() {
+
+    rockChoice.addEventListener('click', function () {
+        if (isPlaying) {
+            const appChoice = appChoiceRandom();
+            playGame('rock', appChoice, rockChoice);
+        }
+    })
+
+    paperChoice.addEventListener('click', function () {
+        if (isPlaying) {
+            const appChoice = appChoiceRandom();
+            playGame('paper', appChoice, paperChoice);
+        }
+    })
+
+    scissorsChoice.addEventListener('click', function () {
+        if (isPlaying) {
+            const appChoice = appChoiceRandom();
+            playGame('scissors', appChoice, scissorsChoice);
+        }
+    })
+
+    showRules();
+}
 
 
-
-
-
-
+window.onload = setupGame;

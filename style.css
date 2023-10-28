@@ -316,8 +316,8 @@ header.header{
     background-color: rgba(255, 255, 255, 0.01);
     animation: smoothGrowing3 0.75s ease-in-out;
 }
-/* .game-over-container{} */
-.gameoversen{
+
+.game-over__message{
     color: #eee;
     text-transform: uppercase;
     margin: auto;
@@ -326,7 +326,7 @@ header.header{
     text-align: center;
     transition: all 0.5s ease-in-out;
 }
-.btn{
+.btn__play-again{
     text-decoration: none;
     color: hsl(214, 47%, 23%);
     width: 20rem;
@@ -445,15 +445,19 @@ header.header{
     .rules-heading{
         font-size: 3rem;
         text-transform: uppercase;
-        color: hsl(229, 25%, 31%);
     }
     .rules-content{
+        color: hsl(229, 25%, 31%);
         flex-basis: 100%;
         order: 3;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
         margin-top: 3rem;
+        gap: 1rem;
+        font-size: 1.5rem;
     }
+
     .close-icon{
         cursor: pointer;
     }
@@ -540,7 +544,7 @@ header.header{
         top: 12.5rem;
         transform: translate(-50%, -50%);
     }
-    .btn:hover{
+    .btn__play-again:hover{
         color: hsl(349, 71%, 52%);
     }
     @keyframes smoothGrowing1 {
@@ -586,3 +590,4 @@ header.header{
         }
     }
 }
+
