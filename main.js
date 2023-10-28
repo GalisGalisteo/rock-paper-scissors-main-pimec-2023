@@ -14,7 +14,6 @@ let isPlaying = true;
 
 let score = 0;
 
-const main = document.querySelector('main');
 const gameBody = document.querySelector('.game-body');
 const rockChoice = document.querySelector('#rock');
 const paperChoice = document.querySelector('#paper');
@@ -62,7 +61,7 @@ function playGame(userChoice, appChoice, nodeEvent) {
 
     const gameOverContainer = document.createElement('div');
     gameOverContainer.classList.add('game-over-container');
-    main.appendChild(gameOverContainer);
+    gameBody.insertAdjacentElement('afterend', gameOverContainer);
 
     const gameOverMessage = document.createElement('h2');
     gameOverContainer.classList.add('game-over__message');
@@ -129,7 +128,7 @@ function resetGame() {
 }
 
 function showRules() {
-    
+
     const rulesPopup = document.querySelector('.rules-popup');
     const overlay = document.querySelector('.overlay');
 
@@ -170,4 +169,6 @@ function setupGame() {
 }
 
 
-window.onload = setupGame;
+document.addEventListener('DOMContentLoaded', () => {
+    setupGame();
+});
