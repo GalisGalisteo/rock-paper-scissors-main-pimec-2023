@@ -45,19 +45,18 @@ function playGame(userChoice, appChoice, nodeEvent) {
     paperChoice.style.display = 'none';
     scissorsChoice.style.display = 'none';
 
-    nodeEvent.style.display = 'initial';
+    nodeEvent.style.display = 'block';
 
     if (appChoice === userChoice) {
         const duplicateNode = nodeEvent.cloneNode(true);
         gameBody.appendChild(duplicateNode);
         duplicateNode.classList.add('choosed-item--com', 'choosed-item--com--s4', 'duplicate-item');
+    } else {
+        const appChoiceNode = document.getElementById(appChoice);
+        appChoiceNode.style.display = 'block';
+        appChoiceNode.classList.add('choosed-item--com', 'choosed-item--com--s4');
     }
-
     nodeEvent.classList.add('choosed-item--user', 'choosed-item--user--s4');
-
-    const appChoiceNode = document.getElementById(appChoice);
-    appChoiceNode.style.display = 'initial';
-    appChoiceNode.classList.add('choosed-item--com', 'choosed-item--com--s4');
 
     const gameOverContainer = document.createElement('div');
     gameOverContainer.classList.add('game-over-container');
@@ -102,9 +101,9 @@ function updateScore() {
 function resetGame() {
     isPlaying = true;
 
-    rockChoice.style.display = 'initial';
-    paperChoice.style.display = 'initial';
-    scissorsChoice.style.display = 'initial';
+    rockChoice.style.display = 'block';
+    paperChoice.style.display = 'block';
+    scissorsChoice.style.display = 'block';
 
     const userItems = document.querySelectorAll('.choosed-item--com.choosed-item--com--s4');
     userItems.forEach(element => {
